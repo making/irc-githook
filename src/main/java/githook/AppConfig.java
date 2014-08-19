@@ -21,7 +21,7 @@ public class AppConfig {
         return Executors.newSingleThreadExecutor();
     }
 
-    @Bean(destroyMethod = "shutdown")
+    @Bean
     PircBotX pircBotX() throws Exception {
         final CountDownLatch latch = new CountDownLatch(1);
         org.pircbotx.Configuration configuration = new org.pircbotx.Configuration.Builder()
