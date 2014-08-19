@@ -40,6 +40,7 @@ public class App {
         // build message
         botX.sendIRC().message(ircBotProperties.getJoinChannel(), "pusher:" + payload.getPusher().getName());
         botX.sendIRC().message(ircBotProperties.getJoinChannel(), "repo:" + payload.getRepository().getUrl());
+        botX.sendIRC().message(ircBotProperties.getJoinChannel(), "ref:" + payload.getRef());
         for (Commit commit : payload.getCommits()) {
             botX.sendIRC().message(ircBotProperties.getJoinChannel(), "\tcommiter:" + commit.getAuthor().getName() +
                     "\ttimestamp:" + commit.getTimestamp() +
