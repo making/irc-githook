@@ -10,4 +10,4 @@ Githook
 
 ## Run in prod mode
 
-    $ java -jar target/*.jar --server.port=9999 --irc.bot.serverHostname=foobar --irc.bot.joinChannel=#hoge
+    $ java -jar target/*.jar --server.port=9999　--irc.bot.name=githook --irc.bot.serverHostname=localhost --irc.bot.joinChannel=#hoge

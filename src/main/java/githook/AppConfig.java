@@ -1,5 +1,6 @@
 package githook;
 
+import lombok.extern.slf4j.Slf4j;
 import org.pircbotx.PircBotX;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.JoinEvent;
@@ -12,6 +13,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @Configuration
+@Slf4j
 public class AppConfig {
     @Autowired
     IrcBotProperties ircBotProperties;
@@ -23,6 +25,7 @@ public class AppConfig {
 
     @Bean
     PircBotX pircBotX() throws Exception {
+        log.info("Using {}", ircBotProperties);
         final CountDownLatch latch = new CountDownLatch(1);
         org.pircbotx.Configuration configuration = new org.pircbotx.Configuration.Builder()
                 .setName(ircBotProperties.getName())

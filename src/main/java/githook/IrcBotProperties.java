@@ -3,11 +3,12 @@ package githook;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+import javax.validation.constraints.Size;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 
 @Component
 @ConfigurationProperties(prefix = "irc.bot")
@@ -15,12 +16,16 @@ import java.nio.charset.StandardCharsets;
 @NoArgsConstructor
 @AllArgsConstructor
 public class IrcBotProperties {
-    private String name = "PircBotX";
-    private String login = "LQ";
+    @Size(min = 1, max = 9)
+    private String name = "GitHook";
+    @NotEmpty
+    private String login = "GH";
     private boolean autoNickChange = true;
     private boolean capEnabled = true;
-    private String serverHostname = "10.68.254.64";
+    @NotEmpty
+    private String serverHostname = "localhost";
     private int serverPort = 6667;
-    private String joinChannel = "#nextgen";
-    private Charset encoding = StandardCharsets.UTF_8;
+    @NotEmpty
+    private String joinChannel = "#githook";
+    private Charset encoding = Charset.forName("ISO-2022-JP");
 }
