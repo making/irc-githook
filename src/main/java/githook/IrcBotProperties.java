@@ -6,6 +6,9 @@ import lombok.NoArgsConstructor;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+
 @Component
 @ConfigurationProperties(prefix = "irc.bot")
 @Data
@@ -19,4 +22,5 @@ public class IrcBotProperties {
     private String serverHostname = "10.68.254.64";
     private int serverPort = 6667;
     private String joinChannel = "#nextgen";
+    private Charset encoding = StandardCharsets.UTF_8;
 }

@@ -32,6 +32,7 @@ public class AppConfig {
                 .setServerHostname(ircBotProperties.getServerHostname())
                 .setServerPort(ircBotProperties.getServerPort())
                 .addAutoJoinChannel(ircBotProperties.getJoinChannel())
+                .setEncoding(ircBotProperties.getEncoding())
                 .addListener(new ListenerAdapter() {
                     @Override
                     public void onJoin(JoinEvent event) throws Exception {
