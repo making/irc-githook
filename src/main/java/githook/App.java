@@ -34,7 +34,7 @@ public class App {
         return "OK";
     }
 
-    @RequestMapping("/webHook")
+    @RequestMapping({"/webhook", "/webHook"})
     String webHook(WebHookRequest webHookRequest) throws IOException {
         Payload payload = objectMapper.readValue(webHookRequest.getPayload(), Payload.class);
         // build message
