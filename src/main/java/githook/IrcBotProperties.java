@@ -28,4 +28,5 @@ public class IrcBotProperties {
     @NotEmpty
     private String joinChannel = "#githook";
     private Charset encoding = Charset.forName("ISO-2022-JP");
+    private String serverPassword = "";
 }
