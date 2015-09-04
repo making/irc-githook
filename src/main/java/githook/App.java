@@ -55,6 +55,7 @@ public class App {
         SpringApplication.run(App.class, args);
     }
 
+    @JsonIgnoreProperties(ignoreUnknown = true)
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
@@ -73,6 +74,7 @@ public class App {
         private Repository repository;
     }
 
+    @JsonIgnoreProperties(ignoreUnknown = true)
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
@@ -81,6 +83,7 @@ public class App {
         private String email;
     }
 
+    @JsonIgnoreProperties(ignoreUnknown = true)
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
@@ -95,6 +98,7 @@ public class App {
         private User author;
     }
 
+    @JsonIgnoreProperties(ignoreUnknown = true)
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
