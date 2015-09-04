@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @EnableAutoConfiguration
@@ -38,14 +40,21 @@ public class App {
     String webHook(WebHookRequest webHookRequest) throws IOException {
         Payload payload = objectMapper.readValue(webHookRequest.getPayload(), Payload.class);
         // build message
-        botX.sendIRC().message(ircBotProperties.getJoinChannel(), "pusher:" + payload.getPusher().getName());
-        botX.sendIRC().message(ircBotProperties.getJoinChannel(), "repo:" + payload.getRepository().getUrl());
-        botX.sendIRC().message(ircBotProperties.getJoinChannel(), "ref:" + payload.getRef());
+        String ref = payload.getRef();
+        String branch = ref.replace("refs/heads/", "");
+        String url = payload.getRepository().getHtml_url();
+        if (!Objects.equals(branch, payload.getRepository().getDefault_branch())) {
+            url = url + "/tree/" + branch;
+        }
+        botX.sendIRC().message(ircBotProperties.getJoinChannel(), "user:" + payload.getPusher().getLogin());
+        botX.sendIRC().message(ircBotProperties.getJoinChannel(), "url:" + url);
+        botX.sendIRC().message(ircBotProperties.getJoinChannel(), "ref:" + ref);
+
         for (Commit commit : payload.getCommits()) {
-            botX.sendIRC().message(ircBotProperties.getJoinChannel(), "\tcommiter:" + commit.getAuthor().getName() +
+            botX.sendIRC().message(ircBotProperties.getJoinChannel(), "\tauthor:" + commit.getAuthor().getName() +
                     "\ttimestamp:" + commit.getTimestamp() +
-                    "\tmessage:" + commit.getMessage() +
-                    "\turl:" + commit.getUrl());
+                    "\turl:" + commit.getHtml_url() +
+                    "\tmessage:" + commit.getMessage());
         }
         return "OK";
     }
@@ -68,7 +77,7 @@ public class App {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Payload {
-        private User pusher;
+        private SiteUser pusher;
         private String ref;
         private List<Commit> commits;
         private Repository repository;
@@ -78,9 +87,24 @@ public class App {
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class User {
+    public static class GitUser {
         private String name;
         private String email;
+        private Date date;
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class SiteUser {
+        private String login;
+        private String email;
+        private String type;
+        private boolean site_admin;
+        private Date created_at;
+        private String url;
+        private String html_url;
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -91,11 +115,13 @@ public class App {
         private String id;
         private String message;
         private String timestamp;
-        private String url;
         private List<String> added;
         private List<String> removed;
         private List<String> modified;
-        private User author;
+        private GitUser author;
+        private GitUser committer;
+        private String url;
+        private String html_url;
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -104,12 +130,19 @@ public class App {
     @AllArgsConstructor
     public static class Repository {
         private String name;
-        private String url;
+        private String full_name;
         private String description;
         private int watchers;
         private int forks;
         private boolean private_;
-        private User owner;
+        private String default_branch;
+        private SiteUser owner;
+        private int forks_count;
+        private int watchers_count;
+        private String url;
+        private String http_url;
+        private String clone_url;
+        private String html_url;
 
         public boolean isPrivate() {
             return this.private_;
