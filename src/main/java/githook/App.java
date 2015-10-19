@@ -41,7 +41,7 @@ public class App {
         Payload payload = objectMapper.readValue(webHookRequest.getPayload(), Payload.class);
         // build message
         String ref = payload.getRef();
-        String branch = ref.replace("refs/heads/", "");
+        String branch = (ref != null) ? ref.replace("refs/heads/", "") : payload.getRepository().getDefault_branch();
         String url = payload.getRepository().getHtml_url();
         if (!Objects.equals(branch, payload.getRepository().getDefault_branch())) {
             url = url + "/tree/" + branch;
