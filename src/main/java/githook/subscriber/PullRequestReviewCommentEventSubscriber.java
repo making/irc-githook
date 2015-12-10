@@ -18,11 +18,18 @@ public class PullRequestReviewCommentEventSubscriber {
         botService.sendMessage("==== "
                 + StringUtils.capitalize(payload.getAction())
                 + " Review Comment ====");
-        botService.sendMessage("user:"
-                + payload.getComment().getUser().getLogin());
         botService.sendMessage("repository: "
                 + payload.getRepository().getFullName());
         botService.sendMessage("title: " + payload.getPullRequest().getTitle());
+        botService.sendMessage("owner:"
+                + payload.getPullRequest().getUser().getLogin());
+        botService.sendMessage("commented by:"
+                + payload.getComment().getUser().getLogin());
         botService.sendMessage("url:" + payload.getComment().getHtmlUrl());
+        if ("created".equals(payload.getAction())) {
+            botService.sendMessage("comment:"
+                    + org.apache.commons.lang3.StringUtils.left(payload
+                            .getComment().getBody(), 50) + "...");
+        }
     }
 }

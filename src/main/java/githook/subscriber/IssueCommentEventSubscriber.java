@@ -18,11 +18,18 @@ public class IssueCommentEventSubscriber {
         botService.sendMessage("==== "
                 + StringUtils.capitalize(payload.getAction())
                 + " Issue Comment ====");
-        botService.sendMessage("user:"
-                + payload.getComment().getUser().getLogin());
         botService.sendMessage("repository: "
                 + payload.getRepository().getFullName());
         botService.sendMessage("title: " + payload.getIssue().getTitle());
+        botService.sendMessage("owner:"
+                + payload.getIssue().getUser().getLogin());
+        botService.sendMessage("commented by:"
+                + payload.getComment().getUser().getLogin());
         botService.sendMessage("url:" + payload.getComment().getHtmlUrl());
+        if ("created".equals(payload.getAction())) {
+            botService.sendMessage("comment:"
+                    + org.apache.commons.lang3.StringUtils.left(payload
+                            .getComment().getBody(), 50) + "...");
+        }
     }
 }

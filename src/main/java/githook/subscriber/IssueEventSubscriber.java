@@ -17,11 +17,11 @@ public class IssueEventSubscriber {
     public void subscribe(IssuesEventPayload payload) {
         botService.sendMessage("==== "
                 + StringUtils.capitalize(payload.getAction()) + " Issue ====");
-        botService.sendMessage("user:"
-                + payload.getIssue().getUser().getLogin());
         botService.sendMessage("repository: "
                 + payload.getRepository().getFullName());
         botService.sendMessage("title: " + payload.getIssue().getTitle());
+        botService.sendMessage("owner:"
+                + payload.getIssue().getUser().getLogin());
         botService.sendMessage("url:" + payload.getIssue().getHtmlUrl());
     }
 }

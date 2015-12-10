@@ -18,11 +18,11 @@ public class PullRequestEventSubscriber {
         botService.sendMessage("==== "
                 + StringUtils.capitalize(payload.getAction())
                 + " PullRequest ====");
-        botService.sendMessage("user:"
-                + payload.getPullRequest().getUser().getLogin());
         botService.sendMessage("repository: "
                 + payload.getRepository().getFullName());
         botService.sendMessage("title: " + payload.getPullRequest().getTitle());
+        botService.sendMessage("owner:"
+                + payload.getPullRequest().getUser().getLogin());
         botService.sendMessage("url:" + payload.getPullRequest().getHtmlUrl());
     }
 }
