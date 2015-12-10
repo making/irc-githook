@@ -16,7 +16,7 @@ public class PushEventSubscriber {
 
     @EventListener
     public void subscribe(PushEventPayload payload) {
-        // build message
+        botService.sendMessage("==== Push ====");
         String ref = payload.getRef();
         String branch = (ref != null) ? ref.replace("refs/heads/", "")
                 : payload.getRepository().getDefaultBranch();
