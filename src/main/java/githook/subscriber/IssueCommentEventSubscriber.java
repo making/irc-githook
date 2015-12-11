@@ -27,9 +27,7 @@ public class IssueCommentEventSubscriber {
                 + payload.getComment().getUser().getLogin());
         botService.sendMessage("url:" + payload.getComment().getHtmlUrl());
         if ("created".equals(payload.getAction())) {
-            botService.sendMessage("comment:"
-                    + org.apache.commons.lang3.StringUtils.left(payload
-                            .getComment().getBody(), 50) + "...");
+            botService.sendMessage("comment:" + payload.getComment().getBody());
         }
     }
 }
