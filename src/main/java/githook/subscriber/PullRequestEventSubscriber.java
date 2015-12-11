@@ -14,15 +14,23 @@ public class PullRequestEventSubscriber {
     BotService botService;
 
     @EventListener
-    public void subscribe(PullRequestEventPayload payload) {
-        botService.sendMessage("==== "
-                + StringUtils.capitalize(payload.getAction())
-                + " PullRequest ====");
-        botService.sendMessage("repository: "
-                + payload.getRepository().getFullName());
-        botService.sendMessage("title: " + payload.getPullRequest().getTitle());
-        botService.sendMessage("owner:"
-                + payload.getPullRequest().getUser().getLogin());
-        botService.sendMessage("url:" + payload.getPullRequest().getHtmlUrl());
+    public void subscribe(final PullRequestEventPayload payload) {
+        botService.synchronizedSend(new BotService.MessageSend() {
+            @Override
+            public void process(BotService.MessageSender sender) {
+                sender.sendMessage("==== "
+                        + StringUtils.capitalize(payload.getAction())
+                        + " PullRequest ====");
+                sender.sendMessage("repository: "
+                        + payload.getRepository().getFullName());
+                sender.sendMessage("title: "
+                        + payload.getPullRequest().getTitle());
+                sender.sendMessage("owner:"
+                        + payload.getPullRequest().getUser().getLogin());
+                sender.sendMessage("url:"
+                        + payload.getPullRequest().getHtmlUrl());
+            }
+        });
+
     }
 }

@@ -14,20 +14,27 @@ public class PullRequestReviewCommentEventSubscriber {
     BotService botService;
 
     @EventListener
-    public void subscribe(PullRequestReviewCommentEventPayload payload) {
-        botService.sendMessage("==== "
-                + StringUtils.capitalize(payload.getAction())
-                + " Review Comment ====");
-        botService.sendMessage("repository: "
-                + payload.getRepository().getFullName());
-        botService.sendMessage("title: " + payload.getPullRequest().getTitle());
-        botService.sendMessage("owner:"
-                + payload.getPullRequest().getUser().getLogin());
-        botService.sendMessage("commented by:"
-                + payload.getComment().getUser().getLogin());
-        botService.sendMessage("url:" + payload.getComment().getHtmlUrl());
-        if ("created".equals(payload.getAction())) {
-            botService.sendMessage("comment:" + payload.getComment().getBody());
-        }
+    public void subscribe(final PullRequestReviewCommentEventPayload payload) {
+        botService.synchronizedSend(new BotService.MessageSend() {
+            @Override
+            public void process(BotService.MessageSender sender) {
+                sender.sendMessage("==== "
+                        + StringUtils.capitalize(payload.getAction())
+                        + " Review Comment ====");
+                sender.sendMessage("repository: "
+                        + payload.getRepository().getFullName());
+                sender.sendMessage("title: "
+                        + payload.getPullRequest().getTitle());
+                sender.sendMessage("owner:"
+                        + payload.getPullRequest().getUser().getLogin());
+                sender.sendMessage("commented by:"
+                        + payload.getComment().getUser().getLogin());
+                sender.sendMessage("url:" + payload.getComment().getHtmlUrl());
+                if ("created".equals(payload.getAction())) {
+                    sender.sendMessage("comment:"
+                            + payload.getComment().getBody());
+                }
+            }
+        });
     }
 }

@@ -14,20 +14,27 @@ public class IssueCommentEventSubscriber {
     BotService botService;
 
     @EventListener
-    public void subscribe(IssueCommentEventPayload payload) {
-        botService.sendMessage("==== "
-                + StringUtils.capitalize(payload.getAction())
-                + " Issue Comment ====");
-        botService.sendMessage("repository: "
-                + payload.getRepository().getFullName());
-        botService.sendMessage("title: " + payload.getIssue().getTitle());
-        botService.sendMessage("owner:"
-                + payload.getIssue().getUser().getLogin());
-        botService.sendMessage("commented by:"
-                + payload.getComment().getUser().getLogin());
-        botService.sendMessage("url:" + payload.getComment().getHtmlUrl());
-        if ("created".equals(payload.getAction())) {
-            botService.sendMessage("comment:" + payload.getComment().getBody());
-        }
+    public void subscribe(final IssueCommentEventPayload payload) {
+        botService.synchronizedSend(new BotService.MessageSend() {
+            @Override
+            public void process(BotService.MessageSender sender) {
+                sender.sendMessage("==== "
+                        + StringUtils.capitalize(payload.getAction())
+                        + " Issue Comment ====");
+                sender.sendMessage("repository: "
+                        + payload.getRepository().getFullName());
+                sender.sendMessage("title: " + payload.getIssue().getTitle());
+                sender.sendMessage("owner:"
+                        + payload.getIssue().getUser().getLogin());
+                sender.sendMessage("commented by:"
+                        + payload.getComment().getUser().getLogin());
+                sender.sendMessage("url:" + payload.getComment().getHtmlUrl());
+                if ("created".equals(payload.getAction())) {
+                    sender.sendMessage("comment:"
+                            + payload.getComment().getBody());
+                }
+            }
+        });
+
     }
 }

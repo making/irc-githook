@@ -13,7 +13,19 @@ public class BotService {
     @Autowired
     PircBotX botX;
 
-    public void sendMessage(String message) {
-        botX.sendIRC().message(ircBotProperties.getJoinChannel(), message);
+    public void synchronizedSend(MessageSend messageSend) {
+        synchronized (botX) {
+            messageSend.process(new MessageSender());
+        }
+    }
+
+    public class MessageSender {
+        public void sendMessage(String message) {
+            botX.sendIRC().message(ircBotProperties.getJoinChannel(), message);
+        }
+    }
+
+    public interface MessageSend {
+        void process(MessageSender sender);
     }
 }

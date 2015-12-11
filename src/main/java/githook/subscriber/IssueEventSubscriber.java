@@ -14,14 +14,20 @@ public class IssueEventSubscriber {
     BotService botService;
 
     @EventListener
-    public void subscribe(IssuesEventPayload payload) {
-        botService.sendMessage("==== "
-                + StringUtils.capitalize(payload.getAction()) + " Issue ====");
-        botService.sendMessage("repository: "
-                + payload.getRepository().getFullName());
-        botService.sendMessage("title: " + payload.getIssue().getTitle());
-        botService.sendMessage("owner:"
-                + payload.getIssue().getUser().getLogin());
-        botService.sendMessage("url:" + payload.getIssue().getHtmlUrl());
+    public void subscribe(final IssuesEventPayload payload) {
+        botService.synchronizedSend(new BotService.MessageSend() {
+            @Override
+            public void process(BotService.MessageSender sender) {
+                sender.sendMessage("==== "
+                        + StringUtils.capitalize(payload.getAction())
+                        + " Issue ====");
+                sender.sendMessage("repository: "
+                        + payload.getRepository().getFullName());
+                sender.sendMessage("title: " + payload.getIssue().getTitle());
+                sender.sendMessage("owner:"
+                        + payload.getIssue().getUser().getLogin());
+                sender.sendMessage("url:" + payload.getIssue().getHtmlUrl());
+            }
+        });
     }
 }

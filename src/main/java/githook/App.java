@@ -17,8 +17,13 @@ public class App {
     BotService botService;
 
     @RequestMapping("/test")
-    String foo(@RequestParam("msg") String message) {
-        botService.sendMessage(message);
+    String foo(@RequestParam("msg") final String message) {
+        botService.synchronizedSend(new BotService.MessageSend() {
+            @Override
+            public void process(BotService.MessageSender sender) {
+                sender.sendMessage(message);
+            }
+        });
         return "OK";
     }
 
